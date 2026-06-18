@@ -5,12 +5,10 @@
   home.homeDirectory = "/home/locks";
   home.stateVersion = "26.05";
 
-  #tide
   home.packages = with pkgs; [
     fishPlugins.tide
   ];
 
-  #tide
   programs.fish = {
     enable = true;
     shellAliases = {
@@ -18,11 +16,11 @@
       ff         = "fastfetch";
     };
     interactiveShellInit = ''
-      fastfetch
+      set fish_greeting # Turn off the default welcome message
     '';
   };
 
-  #kitty config
+  #kitty
   programs.kitty = {
     enable = true;
     font = {
@@ -30,7 +28,7 @@
       size = 12; 
     };
     settings = {
-      shell = "${pkgs.fish}/bin/fish"; #forces Kitty to open Fish directly
+      shell = "${pkgs.fish}/bin/fish --init-command=fastfetch"; 
       scrollback_lines = 10000;
       enable_audio_bell = false;
       update_check_interval = 0; 

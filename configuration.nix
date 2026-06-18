@@ -42,7 +42,7 @@
   environment.plasma6.excludePackages = with pkgs.kdePackages; [
     elisa         # Default music player
     khelpcenter   # Help documentation manual
-    konsole       # Default terminal emulator (You use Kitty!)
+    konsole       # Default terminal emulator
   ];
 
   # Audio & Printing
