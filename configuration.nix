@@ -89,7 +89,7 @@
     isNormalUser = true;
     description = "locks";
     extraGroups = [ "networkmanager" "wheel" ];
-    shell = pkgs.fish; # Sets Fish as your default terminal shell
+    shell = pkgs.fish; 
     packages = with pkgs; [
       kdePackages.kate
     ];

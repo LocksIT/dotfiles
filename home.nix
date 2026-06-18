@@ -10,7 +10,7 @@
     fishPlugins.tide
   ];
 
-  #alias stuff
+  #tide
   programs.fish = {
     enable = true;
     shellAliases = {
@@ -30,6 +30,7 @@
       size = 12; 
     };
     settings = {
+      shell = "${pkgs.fish}/bin/fish"; #forces Kitty to open Fish directly
       scrollback_lines = 10000;
       enable_audio_bell = false;
       update_check_interval = 0; 
@@ -39,6 +40,7 @@
     };
   };
 
+  #minimal ff
   programs.fastfetch = {
     enable = true;
     settings = {
