@@ -59,14 +59,14 @@
   # Hardware / Nvidia PRIME Configuration
   hardware.graphics = {
     enable = true;
-    enable32Bit = true; # Crucial for 32-bit graphics/Wine/Proton gaming acceleration
+    enable32Bit = true; 
   };
   services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia = {
     modesetting.enable = true;
     powerManagement.enable = true;
-    powerManagement.finegrained = false; # Keeps performance optimal on high-end laptops
+    powerManagement.finegrained = false; 
     open = false;
     nvidiaSettings = true;
     package = config.boot.kernelPackages.nvidiaPackages.stable;
@@ -81,11 +81,15 @@
     };
   };
 
+  # Enable the Fish shell system-wide
+  programs.fish.enable = true;
+
   # User Account
   users.users."locks" = {
     isNormalUser = true;
     description = "locks";
     extraGroups = [ "networkmanager" "wheel" ];
+    shell = pkgs.fish; # Sets Fish as your default terminal shell
     packages = with pkgs; [
       kdePackages.kate
     ];
@@ -111,7 +115,7 @@
   
   # Gaming Optimizations
   programs.steam.enable = true;
-  programs.gamemode.enable = true; # Optimizes CPU governor and GPU clocks when games run
+  programs.gamemode.enable = true; 
 
   # Nix Storage Optimization & Flakes Setup
   nix = {

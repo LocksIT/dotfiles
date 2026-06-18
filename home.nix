@@ -5,19 +5,24 @@
   home.homeDirectory = "/home/locks";
   home.stateVersion = "26.05";
 
+  #tide
+  home.packages = with pkgs; [
+    fishPlugins.tide
+  ];
+
   #alias stuff
-  programs.bash = {
+  programs.fish = {
     enable = true;
     shellAliases = {
       nix-switch = "sudo nixos-rebuild switch --flake /etc/nixos#nixos";
       ff         = "fastfetch";
     };
-    initExtra = ''
+    interactiveShellInit = ''
       fastfetch
     '';
   };
 
-  #Kitty Configuration
+  #kitty config
   programs.kitty = {
     enable = true;
     font = {
@@ -31,19 +36,6 @@
       remember_window_size = false;
       initial_window_width = 1000;
       initial_window_height = 650;
-    };
-  };
-
-  #Starship
-  programs.starship = {
-    enable = true;
-    enableBashIntegration = true;
-    settings = {
-      add_newline = false;
-      character = {
-        success_symbol = "[➜](bold green)";
-        error_symbol = "[➜](bold red)";
-      };
     };
   };
 
