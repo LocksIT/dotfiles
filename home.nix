@@ -3,13 +3,21 @@
 {
   home.username = "locks";
   home.homeDirectory = "/home/locks";
+  home.stateVersion = "26.05";
 
-  # User packages
-  home.packages = with pkgs; [
-    # Add personal utilities here
-  ];
+  #alias stuff
+  programs.bash = {
+    enable = true;
+    shellAliases = {
+      nix-switch = "sudo nixos-rebuild switch --flake /etc/nixos#nixos";
+      ff         = "fastfetch";
+    };
+    initExtra = ''
+      fastfetch
+    '';
+  };
 
-  # Declarative Kitty Configuration
+  #Kitty Configuration
   programs.kitty = {
     enable = true;
     font = {
@@ -20,58 +28,37 @@
       scrollback_lines = 10000;
       enable_audio_bell = false;
       update_check_interval = 0; 
-
-      # Forces Kitty to open at a specific larger layout (Width x Height in pixels)
       remember_window_size = false;
       initial_window_width = 1000;
       initial_window_height = 650;
     };
   };
 
-  # Custom Shortcuts & Startup Behaviour for Bash
-  programs.bash = {
+  #Starship
+  programs.starship = {
     enable = true;
-    shellAliases = {
-      nix-switch = "sudo nixos-rebuild switch --flake /etc/nixos#nixos";
-      ff         = "fastfetch";
+    enableBashIntegration = true;
+    settings = {
+      add_newline = false;
+      character = {
+        success_symbol = "[➜](bold green)";
+        error_symbol = "[➜](bold red)";
+      };
     };
-    
-    # Automatically triggers when an interactive terminal session opens
-    initExtra = ''
-      fastfetch
-    '';
   };
 
-  # Custom Minimalist & Privacy-Focused Fastfetch Configuration
   programs.fastfetch = {
     enable = true;
     settings = {
-      logo = {
-        padding = {
-          top = 1;
-          left = 2;
-        };
-      };
+      logo = { padding = { top = 1; left = 2; }; };
       modules = [
-        "title"
-        "separator"
-        "os"
-        "kernel"
-        "uptime"
-        "packages"
-        "shell"
-        "de"
-        "wm"
-        "terminal"
-        "cpu"
-        "gpu"
-        "memory"
-        "disk"
+        "title" "separator" "os" "kernel" "uptime" 
+        "packages" "shell" "de" "wm" "terminal" 
+        "cpu" "gpu" "memory" "disk"
       ];
     };
   };
 
-  # Modern Declarative Git Configuration
   programs.git = {
     enable = true;
     settings = {
@@ -79,15 +66,7 @@
         name = "locks";
         email = "shriveled999milp@proton.me"; 
       };
-      init = {
-        defaultBranch = "main";
-      };
+      init.defaultBranch = "main";
     };
   };
-
-  # Let Home Manager install and manage itself
-  programs.home-manager.enable = true;
-
-  # Match this to your system's stateVersion
-  home.stateVersion = "26.05"; 
 }

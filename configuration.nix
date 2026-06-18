@@ -38,6 +38,13 @@
     variant = "";
   };
 
+  # Strip down KDE Plasma default software bloat
+  environment.plasma6.excludePackages = with pkgs.kdePackages; [
+    elisa         # Default music player
+    khelpcenter   # Help documentation manual
+    konsole       # Default terminal emulator (You use Kitty!)
+  ];
+
   # Audio & Printing
   services.printing.enable = true;
   services.pulseaudio.enable = false;
@@ -50,13 +57,16 @@
   };
 
   # Hardware / Nvidia PRIME Configuration
-  hardware.graphics.enable = true;
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true; # Crucial for 32-bit graphics/Wine/Proton gaming acceleration
+  };
   services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia = {
     modesetting.enable = true;
     powerManagement.enable = true;
-    powerManagement.finegrained = false;
+    powerManagement.finegrained = false; # Keeps performance optimal on high-end laptops
     open = false;
     nvidiaSettings = true;
     package = config.boot.kernelPackages.nvidiaPackages.stable;
@@ -81,6 +91,9 @@
     ];
   };
 
+  # Pass control of user configurations cleanly over to home.nix
+  home-manager.users.locks = import ./home.nix;
+
   # System-wide Packages & Programs
   nixpkgs.config.allowUnfree = true;
   
@@ -95,7 +108,10 @@
   ];
 
   programs.firefox.enable = true;
+  
+  # Gaming Optimizations
   programs.steam.enable = true;
+  programs.gamemode.enable = true; # Optimizes CPU governor and GPU clocks when games run
 
   # Nix Storage Optimization & Flakes Setup
   nix = {
