@@ -42,7 +42,7 @@
   environment.plasma6.excludePackages = with pkgs.kdePackages; [
     elisa         # Default music player
     khelpcenter   # Help documentation manual
-    konsole       # Default terminal emulator
+    konsole       # Default terminal emulator (You use Kitty!)
   ];
 
   # Audio & Printing
@@ -59,14 +59,14 @@
   # Hardware / Nvidia PRIME Configuration
   hardware.graphics = {
     enable = true;
-    enable32Bit = true; 
+    enable32Bit = true; # Crucial for 32-bit graphics/Wine/Proton gaming acceleration
   };
   services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia = {
     modesetting.enable = true;
     powerManagement.enable = true;
-    powerManagement.finegrained = false; 
+    powerManagement.finegrained = false; # Keeps performance optimal on high-end laptops
     open = false;
     nvidiaSettings = true;
     package = config.boot.kernelPackages.nvidiaPackages.stable;
@@ -81,8 +81,11 @@
     };
   };
 
-  # Enable the Fish shell system-wide
-  programs.fish.enable = true;
+  # Enable the Fish shell system-wide and strip vendor conflict layers
+  programs.fish = {
+    enable = true;
+    vendor.config.enable = false; # Prevents system script collision with home-manager
+  };
 
   # User Account
   users.users."locks" = {

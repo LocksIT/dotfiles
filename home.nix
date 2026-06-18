@@ -7,20 +7,32 @@
 
   home.packages = with pkgs; [
     fishPlugins.tide
+    fastfetch 
   ];
 
+  # Explicit shell configuration with strict launch guard
   programs.fish = {
     enable = true;
+    
+    shellAbbrs = {};
+    
+    # Using shellAliases prevents the long command from expanding visually on your prompt
     shellAliases = {
+      ff         = "fastfetch --structure title:separator:os:kernel:uptime:packages:shell:de:wm:terminal:cpu:gpu:memory:disk:break:colors";
       nix-switch = "sudo nixos-rebuild switch --flake /etc/nixos#nixos";
-      ff         = "fastfetch";
     };
+    
     interactiveShellInit = ''
-      set fish_greeting # Turn off the default welcome message
+      set -g fish_greeting ""
+
+      if status is-interactive; and not set -q NM_FF_RUN
+        set -g NM_FF_RUN 1
+        fastfetch --structure title:separator:os:kernel:uptime:packages:shell:de:wm:terminal:cpu:gpu:memory:disk:break:colors
+      end
     '';
   };
 
-  #kitty
+  # Declarative Kitty Configuration
   programs.kitty = {
     enable = true;
     font = {
@@ -28,7 +40,7 @@
       size = 12; 
     };
     settings = {
-      shell = "${pkgs.fish}/bin/fish --init-command=fastfetch"; 
+      shell = "${pkgs.fish}/bin/fish"; 
       scrollback_lines = 10000;
       enable_audio_bell = false;
       update_check_interval = 0; 
@@ -38,19 +50,7 @@
     };
   };
 
-  #minimal ff
-  programs.fastfetch = {
-    enable = true;
-    settings = {
-      logo = { padding = { top = 1; left = 2; }; };
-      modules = [
-        "title" "separator" "os" "kernel" "uptime" 
-        "packages" "shell" "de" "wm" "terminal" 
-        "cpu" "gpu" "memory" "disk"
-      ];
-    };
-  };
-
+  # Declarative Git Configuration
   programs.git = {
     enable = true;
     settings = {
